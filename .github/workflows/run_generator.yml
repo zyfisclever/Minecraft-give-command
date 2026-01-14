@@ -1,0 +1,30 @@
+name: Run Generator Script
+
+# 触发条件：当你向 main 分支推送代码，或者手动触发
+on:
+  workflow_dispatch: # 允许你在 Actions 页面手动点击按钮运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 系统
+
+    steps:
+      # 1. 检出代码（把你的代码拉取到虚拟机里）
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 安装 Python 环境
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # 你可以指定需要的版本
+
+      # 3. 安装依赖（如果你的脚本需要第三方库）
+      - name: Install dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # 如果没有 requirements.txt，也可以直接写 pip install 具体的库
+
+      # 4. 运行你的脚本
+      - name: Run generator.py
+        run: python generator.py
